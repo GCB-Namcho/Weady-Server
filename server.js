@@ -114,21 +114,35 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+const fs = require('fs');
+
 app.post('/question', async (req, res) => {
     const { location, situation, username } = req.body;
     const existingUser = await db.collection('user').findOne({ username: username });
+
     const sendJson = {
-        age : existingUser.age,
-        gender : existingUser.gender,
-        height : existingUser.height,
-        weight : existingUser.weight,
-        location : location,
-        situation : situation
-    }
-    console.log(sendJson)
-})
+        age: existingUser.age,
+        gender: existingUser.gender,
+        height: existingUser.height,
+        weight: existingUser.weight,
+        location: location,
+        situation: situation
+    };
+
+    // JSON 파일로 저장
+    fs.writeFile('send.json', JSON.stringify(sendJson, null, 2), (err) => {
+        if (err) {
+            console.error('Error writing to file', err);
+            res.status(500).send('Error writing to file');
+            return;
+        }
+        console.log('JSON file has been saved.');
+        res.send('JSON file has been created.');
+    });
+});
+
 // 서버 시작
-const PORT = 8080;
+const PORT = 8082;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
