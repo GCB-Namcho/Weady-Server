@@ -115,8 +115,8 @@ app.post('/signup', async (req, res) => {
 });
 
 app.post('/question', async (req, res) => {
-    const { location, situation } = req.body;
-    const existingUser = await db.collection('user').findOne({ username: "test" });
+    const { location, situation, username } = req.body;
+    const existingUser = await db.collection('user').findOne({ username: username });
     const sendJson = {
         age : existingUser.age,
         gender : existingUser.gender,
